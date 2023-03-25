@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-
 import 'Questions.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 import 'quizbrain.dart';
 
 
@@ -45,7 +45,40 @@ class _QuizPageState extends State<QuizPage> {
 
   ];
 
+  void checkScore(bool userAnswer){
+
+    setState(() {
+
+
+    if(userAnswer==quiz.getAnswer()){
+      scoreKeeper.add(
+          Icon(
+            Icons.check,
+            color: Colors.green,
+          )
+      );
+    }
+    else{
+      scoreKeeper.add(
+          Icon(
+            Icons.close,
+            color: Colors.red,
+          )
+      );
+    }
+    quiz.increaseQnNumber();
+
+    });
+
+  }
+
   //when questions are completed
+  bool endOfTheQuestions(){
+    if(quiz.getQnNumber()>=quiz.totalNumberOfQuestions()-1)
+      return true;
+    return false;
+  }
+
 
 
 
@@ -79,24 +112,26 @@ class _QuizPageState extends State<QuizPage> {
                 style: ButtonStyle(backgroundColor: MaterialStatePropertyAll(Colors.green)),
                 onPressed: (){
                   setState(() {
-                    if( quiz.getAnswer()==true){
-                      scoreKeeper.add(
-                        Icon(
-                          Icons.check,
-                          color: Colors.green,
-                        )
-                      );
+                    if(endOfTheQuestions()){
+                      Alert(
+                          context: context,
+                          title: "End of Quiz",
+                          desc: "You have reached end of quiz your score is ",
+                          buttons: [
+                            DialogButton(
+                                child: Text("Reset",
+                                  style: TextStyle(color: Colors.white,fontSize: 20),
+                                ),
+                                onPressed:(){
+                                  scoreKeeper.clear();
+                                  quiz.setQuestionNumberToZero();
+                                }
+                            ),
+                          ]
+                      ).show();
                     }
-                    else{
-                      scoreKeeper.add(
-                          Icon(Icons.close,
-                          color: Colors.red,),
-                      );
-                    }
-
-                    quiz.increaseQnNumber();
-
                   });
+                  checkScore(true);
                 },
                 child: Text('True',
                   style: TextStyle(
@@ -113,24 +148,26 @@ class _QuizPageState extends State<QuizPage> {
                 style: ButtonStyle(backgroundColor: MaterialStatePropertyAll(Colors.red)),
                 onPressed: (){
                   setState(() {
-
-                    if(quiz.getAnswer()==false){
-                      scoreKeeper.add(
-                          Icon(
-                            Icons.check,
-                            color: Colors.green,
-                          )
-                      );
-                    }
-                    else{
-                      scoreKeeper.add(
-                        Icon(Icons.close,
-                          color: Colors.red,),
-                      );
-                    }
-                    quiz.increaseQnNumber();
-
+                  if(endOfTheQuestions()){
+                    Alert(
+                      context: context,
+                      title: "End of Quiz",
+                      desc: "You have reached end of quiz your score is ",
+                      buttons: [
+                        DialogButton(
+                            child: Text("Reset",
+                              style: TextStyle(color: Colors.white,fontSize: 20),
+                            ),
+                            onPressed:(){
+                              scoreKeeper.clear();
+                              quiz.setQuestionNumberToZero();
+                            }
+                        ),
+                      ]
+                    ).show();
+                  }
                   });
+                 checkScore(false);
                 },
                 child: Text('False',
                   style: TextStyle(

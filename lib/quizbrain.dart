@@ -56,6 +56,26 @@ class quizBrain{
     return _store[_questionNumber].answerBool;
   }
 
+  //To get index or rather say question number
+  int getQnNumber(){
+    return this._questionNumber;
+  }
+
+  //For getting total number of questions
+  int totalNumberOfQuestions(){
+    return this._store.length;
+  }
+
+  //Setter methods are implemented here
+
+  void setQuestionNumberToZero(){
+    this._questionNumber=0;
+  }
+
+
+
+
+
 
 
 
